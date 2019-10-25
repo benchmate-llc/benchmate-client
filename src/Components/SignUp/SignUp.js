@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import GenderRadioButtons from './GenderRadioButtons';
 
@@ -28,32 +28,32 @@ function Copyright() {
   );
 }
 
-// const useStyles = makeStyles(theme => ({
-//   '@global': {
-//     body: {
-//       backgroundColor: theme.palette.common.white,
-//     },
-//   },
-//   paper: {
-//     marginTop: theme.spacing(8),
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: 'center',
-//   },
-//   avatar: {
-//     margin: theme.spacing(1),
-//     backgroundColor: theme.palette.secondary.main,
-//   },
-//   form: {
-//     width: '100%', // Fix IE 11 issue.
-//     marginTop: theme.spacing(3),
-//   },
-//   submit: {
-//     margin: theme.spacing(3, 0, 2),
-//   },
-// }));
+const styles = theme => ({
+  '@global': {
+    body: {
+      backgroundColor: theme.palette.common.white,
+    },
+  },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+});
 
-export default class SignUp extends React.Component {
+class SignUp extends React.Component {
   //const classes = useStyles();
   constructor(props) {
     super()
@@ -69,25 +69,23 @@ export default class SignUp extends React.Component {
   }
 
   render() {
+    const{classes} = this.props
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <div> 
-          {/* className={classes.paper}> */}
+        <div className={classes.paper}>
           <Typography component="h1" color="primary" variant="h4">
             BenchMate
           </Typography>
-          <Avatar >
-            {/* className={classes.avatar}> */}
+          <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <form >
-            {/* className={classes.form} noValidate> */}
+          <form className={classes.form} noValidate>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="fname"
                   name="firstName"
@@ -110,7 +108,7 @@ export default class SignUp extends React.Component {
               </Grid>
               <Grid item xs={12} sm={6}>
                   <GenderRadioButtons/>
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 <TextField
                   variant="outlined"
@@ -140,7 +138,7 @@ export default class SignUp extends React.Component {
               fullWidth
               variant="contained"
               color="primary"
-              //className={classes.submit}
+              className={classes.submit}
             >
               Sign Up
             </Button>
@@ -160,3 +158,5 @@ export default class SignUp extends React.Component {
     );
   }
 }
+
+export default withStyles(styles)(SignUp);
