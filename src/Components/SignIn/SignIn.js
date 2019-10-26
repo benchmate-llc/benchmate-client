@@ -53,8 +53,50 @@ const styles = theme => ({
 });
 
 class SignIn extends React.Component{
+  constructor(props) {
+    super(props)
+    this.state = {
+        email: "",
+        password: "",
+        loggedIn: false,
+        //profile : {email}
+    };
+  }
+
+  handleChange = event => ({target}) => {
+    this.setState({[event]: target.value});
+  }
+
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    let credentials = {
+      email: this.state.email,
+      password: this.state.password
+    }
+
+    if(credentials) {
+      this.setState({loggedIn: true});
+    }
+    else {
+      console.log("Incorrect credentials");
+    }
+  }
+
+  handleKeyPress = event => {
+    if(event.key == "Enter") {
+      this.handleSubmit();
+    }
+  }
+
   render() {
     const {classes}  = this.props
+    // if(this.state.loggedIn) {
+    //   return(
+    //     <div>
+    //       <Home 
+    //     </div>
+    //   )
+    // }
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
