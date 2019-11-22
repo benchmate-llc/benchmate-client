@@ -1,25 +1,19 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
+import {Avatar,CssBaseline,TextField,Grid,Box,Typography,
+  Container,Button,withStyles,Paper} from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { Link, withRouter } from 'react-router-dom';
+import axios from 'axios';
+import {Redirect} from 'react-router-dom'
+//import Cookies from 'universal-cookie';
+
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      {/* <Link color="inherit" href="https://material-ui.com/"> */}
-        BenchMate LLC 
-      {' '}
+      {/* <Link color="inherit" href=""> */}
+        BenchMate LLC
       {/* </Link>{' '} */}
       {new Date().getFullYear()}
       {'.'}
@@ -28,133 +22,161 @@ function Copyright() {
 }
 
 const styles = theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
+  root: {
+      height: '100vh',
+  },
+  image: {
+      backgroundImage: 'url(https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/young-adult-man-swinging-ropes-while-fitness-royalty-free-image-952755662-1566586488.jpg)',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
   },
   paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+      margin: theme.spacing(8, 4),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
   },
   avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+      margin: theme.spacing(1),
+      backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+      width: '100%', // Fix IE 11 issue.
+      marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+      margin: theme.spacing(3, 0, 2),
   },
 });
 
-class SignIn extends React.Component{
+
+class Signin extends React.Component{
   constructor(props) {
-    super(props)
-    this.state = {
-        email: "",
-        password: "",
-        loggedIn: false,
-        //profile : {email}
-    };
-  }
+      super();
+      this.state = {
+          email: "",
+          password:"", 
+          redirect: false,
+          //error: "",
+          isAuthenticated: false
+      };
+  }   
+
+  // componentDidMount() {
+  //   const auth = sessionStorage.getItem("pizzaAuth");
+  //   if (auth) {
+  //     this.setState({
+  //       isAuthenticated: true
+  //     });
+  //     return;
+  //   }
+  // }
 
   handleChange = event => ({target}) => {
     this.setState({[event]: target.value});
   }
 
   handleSubmit = async (event) => {
+    //const cookies = new Cookies();
+    const apiLink = ""
     event.preventDefault();
     let credentials = {
       email: this.state.email,
       password: this.state.password
     }
-
-    if(credentials) {
-      this.setState({loggedIn: true});
+    let res = await axios.post(apiLink, credentials)
+    if (!res.data.success) {
+        alert("Please enter right credentials!")
+        // console.log(res)
     }
     else {
-      console.log("Incorrect credentials");
+        this.setState({
+        //redirect: true,
+        isAuthenticated: true,
+        //profile: res.data.user
+        })
+        //cookies.set('token', res.data.token, { path: '/home' });
+      console.log("Successful attempt! ")
     }
   }
-
+  
   handleKeyPress = event => {
-    if(event.key == "Enter") {
+    if(event.key === 'Enter') {
       this.handleSubmit();
     }
   }
 
   render() {
-    const {classes}  = this.props
-    // if(this.state.loggedIn) {
+    // if (this.state.isAuthenticated) {
     //   return(
-    //     <div>
-    //       <Home 
-    //     </div>
+    //     <Redirect to={"/home"} />
     //   )
     // }
+    const { classes} = this.props;
     return (
-      <Container component="main" maxWidth="xs">
+      <Grid container component="main" className={classes.root}>
         <CssBaseline />
-        <div className={classes.paper}>
-          <Typography component="h1" color="primary" variant="h4">
-            BenchMate
-          </Typography>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-          <form className={classes.form} noValidate>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item>
-                <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+        <Grid item xs={false} sm={4} md={7} className={classes.image} />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            <form className={classes.form} noValidate>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                onChange={this.handleChange('email')}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                onChange={this.handleChange('password')}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={this.handleSubmit}
+              >
+                Sign In
+              </Button>
+              <Grid container>
+                <Grid item xs>
+                </Grid>
+                <Grid item>
+                  <Link to="/" variant="body2">
+                      Don't have an account? Sign up
+                  </Link>
+                </Grid>
               </Grid>
-            </Grid>
-          </form>
-        </div>
-        <Box mt={8}>
-          <Copyright />
-        </Box>
-      </Container>
+              <Box mt={5}>
+                <Copyright />
+              </Box>
+            </form>
+          </div>
+        </Grid>
+      </Grid>
     );
-  }  
+  }
 }
 
-export default withStyles(styles)(SignIn);
+export default withRouter(withStyles(styles)(Signin))
